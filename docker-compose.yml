@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  client:
+    build:
+      context: alpine_client
+      dockerfile: Dockerfile
+    #uncomment for development mode
+    #volumes:
+    #  - ${PWD}/alpine_client/src:/src
+    command: tail -F /dev/null
+    environment:
+      - FTP_HOST=ftpserver
+      - FTP_PORT=21
+      - NAME=user1
+      - PASS=123456
+  ftpserver:
+    build:
+      context: alpine_ftp
+      dockerfile: Dockerfile
+    expose:
+      - 21
+    volumes:
+      - ${PWD}/alpine_ftp/ftpfolder:/home/user1
+    environment:
+      - NAME=user1
+      - PASS=123456
+      - FOLDER=/home/user1
